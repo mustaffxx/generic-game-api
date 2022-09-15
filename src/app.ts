@@ -1,5 +1,7 @@
 import express from 'express'
 
+require('express-async-errors')
+
 import { errorHandler } from './middlewares/errorHandler'
 
 import undefinedRoute from './routes/undefinedRoute'
