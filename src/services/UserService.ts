@@ -1,13 +1,10 @@
 import createHttpError from 'http-errors'
-import { AppDataSource } from '../data-source'
-import { User } from '../entities/User'
+import { userRepository } from '../repositories/UserRepository'
 
 class UserService {
     async create(username: string, role: string) {
         if (!username || !role)
             throw createHttpError(400, 'username or role incorrect')
-
-        const userRepository = AppDataSource.getRepository(User)
 
         const alreadyUser = await userRepository.find({
             where: { username, role }
