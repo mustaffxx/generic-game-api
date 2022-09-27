@@ -9,6 +9,13 @@ class UserService {
 
         const userRepository = AppDataSource.getRepository(User)
 
+        const alreadyUser = await userRepository.find({
+            where: { username, role }
+        })
+
+        if (alreadyUser.length)
+            throw createHttpError(409, 'username already exists')
+
         const user = userRepository.create({ username, role })
 
         await userRepository.save(user)
