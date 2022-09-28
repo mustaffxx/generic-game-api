@@ -7,7 +7,7 @@ class UserService {
             throw createHttpError(400, 'username or role incorrect')
 
         const alreadyUser = await userRepository.find({
-            where: { username, role }
+            where: { username: username }
         })
 
         if (alreadyUser.length)
