@@ -17,7 +17,11 @@ class UserService {
 
         await userRepository.save(user)
 
-        return user
+        return {
+            username: user.username,
+            role: user.role,
+            experience: user.experience
+        }
     }
 }
 
