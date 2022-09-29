@@ -10,6 +10,14 @@ class UserController {
 
         return res.status(201).json(user)
     }
+
+    async readyByUsername(req: Request, res: Response) {
+        const username = req.params.username
+
+        const user = await UserService.readByUsername(username)
+
+        return res.status(200).json(user)
+    }
 }
 
 export default new UserController()
