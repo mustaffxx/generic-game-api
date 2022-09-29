@@ -30,6 +30,12 @@ describe('userRoute', () => {
             const response = await supertest(app).post('/api/game/user').send(testUsers[0])
 
             expect(response.status).toBe(201)
+
+            expect(response.body).toEqual({
+                username: expect.any(String),
+                role: expect.any(String),
+                experience: expect.any(String)
+            })
         })
 
         it('should return 400 status code if pass incorrect params', async () => {
