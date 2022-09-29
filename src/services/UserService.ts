@@ -23,6 +23,24 @@ class UserService {
             experience: user.experience
         }
     }
+
+    async readByUsername(username: string) {
+        if (!username)
+            throw createHttpError(400, 'username invalid')
+
+        const user = await userRepository.findOne({
+            where: { username: username }
+        })
+
+        if (!user)
+            throw createHttpError(204, 'username does not exist')
+
+        return {
+            username: user.username,
+            role: user.role,
+            experience: user.experience
+        }
+    }
 }
 
 export default new UserService()
