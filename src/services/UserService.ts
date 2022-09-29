@@ -4,7 +4,7 @@ import { userRepository } from '../repositories/UserRepository'
 class UserService {
     async create(username: string, role: string) {
         if (!username || !role)
-            throw createHttpError(400, 'username or role incorrect')
+            throw createHttpError(400, 'username or role invalid')
 
         const alreadyUser = await userRepository.find({
             where: { username: username }
