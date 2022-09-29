@@ -3,7 +3,7 @@ import 'reflect-metadata'
 
 import { DataSource } from 'typeorm'
 
-import { User } from './entities/User'
+import { Player } from './entities/Player'
 
 export const AppDataSource = new DataSource({
     type: 'postgres',
@@ -12,7 +12,7 @@ export const AppDataSource = new DataSource({
     username: process.env.DB_USERNAME || 'postgres',
     password: process.env.DB_PASSWORD || 'postgres',
     database: process.env.DB_NAME || 'postgres',
-    entities: [User],
+    entities: [Player],
     synchronize: true,
     dropSchema: true
 })

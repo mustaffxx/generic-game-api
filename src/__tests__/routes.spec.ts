@@ -14,9 +14,9 @@ afterAll(async () => {
     await AppDataSource.destroy()
 })
 
-describe('userRoute', () => {
+describe('playerRoutes', () => {
 
-    const testUsers = [
+    const fakePlayers = [
         {
             username: 'test1',
             role: 'role1'
@@ -27,8 +27,8 @@ describe('userRoute', () => {
     ]
 
     describe('create', () => {
-        it('should create user', async () => {
-            const response = await supertest(app).post('/api/game/user').send(testUsers[0])
+        it('should create player', async () => {
+            const response = await supertest(app).post('/api/game/player').send(fakePlayers[0])
 
             expect(response.status).toBe(201)
 
@@ -40,25 +40,25 @@ describe('userRoute', () => {
         })
 
         it('should return 400 status code if pass incorrect params', async () => {
-            const response = await supertest(app).post('/api/game/user').send({ username: '', role: 'role2' })
+            const response = await supertest(app).post('/api/game/player').send({ username: '', role: 'role2' })
 
             expect(response.status).toBe(400)
         })
 
-        it('should return 409 status code if user already exists', async () => {
-            await supertest(app).post('/api/game/user').send(testUsers[0])
+        it('should return 409 status code if player already exists', async () => {
+            await supertest(app).post('/api/game/player').send(fakePlayers[0])
 
-            const response = await supertest(app).post('/api/game/user').send(testUsers[0])
+            const response = await supertest(app).post('/api/game/player').send(fakePlayers[0])
 
             expect(response.status).toBe(409)
         })
     })
 
     describe('readyByUsername', () => {
-        it('should return 200 status code with user', async () => {
-            await supertest(app).post('/api/game/user').send(testUsers[0])
+        it('should return 200 status code with player', async () => {
+            await supertest(app).post('/api/game/player').send(fakePlayers[0])
 
-            const response = await supertest(app).get('/api/game/user/' + testUsers[0].username)
+            const response = await supertest(app).get('/api/game/player/' + fakePlayers[0].username)
 
             expect(response.status).toBe(200)
 
@@ -69,8 +69,8 @@ describe('userRoute', () => {
             })
         })
 
-        it('should return 204 status code if user does not exist', async () => {
-            const response = await supertest(app).get('/api/game/user/' + testUsers[0].username)
+        it('should return 204 status code if player does not exist', async () => {
+            const response = await supertest(app).get('/api/game/player/' + fakePlayers[0].username)
 
             expect(response.status).toBe(204)
         })
