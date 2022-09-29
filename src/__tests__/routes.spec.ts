@@ -15,17 +15,18 @@ afterAll(async () => {
 })
 
 describe('userRoute', () => {
-    describe('create', () => {
-        const testUsers = [
-            {
-                username: 'test1',
-                role: 'role1'
-            }, {
-                username: 'test2',
-                role: 'role2'
-            }
-        ]
 
+    const testUsers = [
+        {
+            username: 'test1',
+            role: 'role1'
+        }, {
+            username: 'test2',
+            role: 'role2'
+        }
+    ]
+
+    describe('create', () => {
         it('should create user', async () => {
             const response = await supertest(app).post('/api/game/user').send(testUsers[0])
 
@@ -50,6 +51,28 @@ describe('userRoute', () => {
             const response = await supertest(app).post('/api/game/user').send(testUsers[0])
 
             expect(response.status).toBe(409)
+        })
+    })
+
+    describe('readyByUsername', () => {
+        it('should return 200 status code with user', async () => {
+            await supertest(app).post('/api/game/user').send(testUsers[0])
+
+            const response = await supertest(app).get('/api/game/user/' + testUsers[0].username)
+
+            expect(response.status).toBe(200)
+
+            expect(response.body).toEqual({
+                username: expect.any(String),
+                role: expect.any(String),
+                experience: expect.any(String)
+            })
+        })
+
+        it('should return 204 status code if user does not exist', async () => {
+            const response = await supertest(app).get('/api/game/user/' + testUsers[0].username)
+
+            expect(response.status).toBe(204)
         })
     })
 })
