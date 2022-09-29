@@ -25,9 +25,6 @@ class UserService {
     }
 
     async readByUsername(username: string) {
-        if (!username)
-            throw createHttpError(400, 'username invalid')
-
         const user = await userRepository.findOne({
             where: { username: username }
         })
