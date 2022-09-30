@@ -71,10 +71,10 @@ describe('playerRoutes', () => {
             })
         })
 
-        it('should return 204 status code if player does not exist', async () => {
+        it('should return 404 status code if player does not exist', async () => {
             const response = await supertest(app).get('/api/game/player/' + fakePlayers[0].username)
 
-            expect(response.status).toBe(204)
+            expect(response.status).toBe(404)
         })
     })
 

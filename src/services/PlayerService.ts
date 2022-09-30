@@ -30,7 +30,7 @@ class PlayerService {
         })
 
         if (!player)
-            throw createHttpError(204, 'username does not exist')
+            throw createHttpError(404, 'username does not exist')
 
         return {
             username: player.username,
