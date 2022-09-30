@@ -2,6 +2,8 @@ import supertest from 'supertest'
 import app from '../app'
 import { AppDataSource } from '../data-source'
 
+import { playerRepository } from '../repositories/PlayerRepository'
+
 beforeAll(async () => {
     await AppDataSource.initialize()
 })
@@ -73,6 +75,29 @@ describe('playerRoutes', () => {
             const response = await supertest(app).get('/api/game/player/' + fakePlayers[0].username)
 
             expect(response.status).toBe(204)
+        })
+    })
+
+    describe('deleteByUsername', () => {
+        it('should return 200 status code with empty values in properties', async () => {
+            const username = fakePlayers[0].username
+            const role = fakePlayers[0].role
+            await playerRepository.create({ username, role }).save()
+
+            const response = await supertest(app).delete('/api/game/player/' + username)
+
+            expect(response.status).toBe(200)
+            expect(response.body).toEqual({
+                username: username,
+                role: role,
+                experience: expect.any(String)
+            })
+        })
+
+        it('should return 404 status code if player does not exist', async () => {
+            const response = await supertest(app).delete('/api/game/player/' + fakePlayers[0].username)
+
+            expect(response.status).toBe(404)
         })
     })
 })

@@ -18,6 +18,14 @@ class PlayerController {
 
         return res.status(200).json(player)
     }
+
+    async deleteByUsername(req: Request, res: Response) {
+        const username = req.params.username
+
+        const player = await PlayerService.deleteByUsername(username)
+
+        return res.status(200).json(player)
+    }
 }
 
 export default new PlayerController()

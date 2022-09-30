@@ -38,6 +38,23 @@ class PlayerService {
             experience: player.experience
         }
     }
+
+    async deleteByUsername(username: string) {
+        const player = await playerRepository.findOne({
+            where: { username: username }
+        })
+
+        if (!player)
+            throw createHttpError(404, 'username does not exist')
+
+        await playerRepository.delete(player.id)
+
+        return {
+            username: player.username,
+            role: player.role,
+            experience: player.experience
+        }
+    }
 }
 
 export default new PlayerService()
