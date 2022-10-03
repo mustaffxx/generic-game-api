@@ -1,5 +1,15 @@
 import { BaseEntity, Entity, Column, PrimaryGeneratedColumn } from 'typeorm'
 
+export class ColumnNumberTransformer {
+    to(data: number): number {
+        return data;
+    }
+
+    from(data: string): number {
+        return parseInt(data)
+    }
+}
+
 @Entity('players')
 export class Player extends BaseEntity {
     @PrimaryGeneratedColumn()
@@ -11,6 +21,6 @@ export class Player extends BaseEntity {
     @Column({ type: 'text', nullable: false })
     role!: string
 
-    @Column({ type: 'text', default: 0 })
+    @Column({ type: 'int8', default: 0, transformer: new ColumnNumberTransformer() })
     experience!: number
 }
