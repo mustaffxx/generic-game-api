@@ -36,9 +36,9 @@ describe('playerRoutes', () => {
             expect(response.status).toBe(201)
 
             expect(response.body).toEqual({
-                username: expect.any(String),
-                role: expect.any(String),
-                experience: expect.any(Number)
+                username: fakePlayers[0].username,
+                role: fakePlayers[0].role,
+                experience: 0
             })
         })
 
@@ -66,9 +66,9 @@ describe('playerRoutes', () => {
             expect(response.status).toBe(200)
 
             expect(response.body).toEqual({
-                username: expect.any(String),
-                role: expect.any(String),
-                experience: expect.any(Number)
+                username: fakePlayers[0].username,
+                role: fakePlayers[0].role,
+                experience: 0
             })
         })
 
@@ -88,10 +88,11 @@ describe('playerRoutes', () => {
             const response = await supertest(app).delete('/api/game/player/' + username)
 
             expect(response.status).toBe(200)
+
             expect(response.body).toEqual({
                 username: username,
                 role: role,
-                experience: expect.any(Number)
+                experience: 0
             })
         })
 
@@ -108,10 +109,12 @@ describe('mobRoutes', () => {
     const fakeMobs = [
         {
             name: 'test1',
-            classification: 'classification1'
+            classification: 'classification1',
+            experience: 2
         }, {
             name: 'test2',
-            classification: 'classification2'
+            classification: 'classification2',
+            experience: 5
         }
     ]
 
@@ -122,9 +125,9 @@ describe('mobRoutes', () => {
             expect(response.status).toBe(201)
 
             expect(response.body).toEqual({
-                name: expect.any(String),
-                classification: expect.any(String),
-                experience: expect.any(Number)
+                name: fakeMobs[0].name,
+                classification: fakeMobs[0].classification,
+                experience: fakeMobs[0].experience
             })
         })
 
@@ -152,9 +155,9 @@ describe('mobRoutes', () => {
             expect(response.status).toBe(200)
 
             expect(response.body).toEqual({
-                name: expect.any(String),
-                classification: expect.any(String),
-                experience: expect.any(Number)
+                name: fakeMobs[0].name,
+                classification: fakeMobs[0].classification,
+                experience: fakeMobs[0].experience
             })
         })
 
@@ -169,15 +172,18 @@ describe('mobRoutes', () => {
         it('should return 200 status code with empty values in properties', async () => {
             const name = fakeMobs[0].name
             const classification = fakeMobs[0].classification
-            await mobRepository.create({ name, classification }).save()
+            const experience = fakeMobs[0].experience
+
+            await mobRepository.create({ name, classification, experience }).save()
 
             const response = await supertest(app).delete('/api/game/mob/' + name)
 
             expect(response.status).toBe(200)
+
             expect(response.body).toEqual({
                 name: name,
                 classification: classification,
-                experience: expect.any(Number)
+                experience: experience
             })
         })
 
