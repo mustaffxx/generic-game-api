@@ -126,5 +126,41 @@ describe('mobRoutes', () => {
                 experience: expect.any(Number)
             })
         })
+
+        it('should return 400 status code if pass incorrect params', async () => {
+            const response = await supertest(app).post('/api/game/mob').send({ name: '', classication: 'classification1' })
+
+            expect(response.status).toBe(400)
+        })
+
+        it('should return 409 status code if mob already exists', async () => {
+            await supertest(app).post('/api/game/mob').send(fakeMobs[0])
+
+            const response = await supertest(app).post('/api/game/mob').send(fakeMobs[0])
+
+            expect(response.status).toBe(409)
+        })
+    })
+
+    describe('readyByName', () => {
+        it('should return 200 status code with mob', async () => {
+            await supertest(app).post('/api/game/mob').send(fakeMobs[0])
+
+            const response = await supertest(app).get('/api/game/mob/' + fakeMobs[0].name)
+
+            expect(response.status).toBe(200)
+
+            expect(response.body).toEqual({
+                name: expect.any(String),
+                classification: expect.any(String),
+                experience: expect.any(Number)
+            })
+        })
+
+        it('should return 404 status code if mob does not exist', async () => {
+            const response = await supertest(app).get('/api/game/mob/' + fakeMobs[0].name)
+
+            expect(response.status).toBe(404)
+        })
     })
 })

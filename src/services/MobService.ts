@@ -23,6 +23,21 @@ class MobService {
             experience: mob.experience
         }
     }
+
+    async readByName(name: string) {
+        const mob = await mobRepository.findOne({
+            where: { name: name }
+        })
+
+        if (!mob)
+            throw createHttpError(404, 'mob does not exist')
+
+        return {
+            name: mob.name,
+            classification: mob.classification,
+            experience: mob.experience
+        }
+    }
 }
 
 export default new MobService()

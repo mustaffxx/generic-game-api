@@ -10,6 +10,14 @@ class MobController {
 
         return res.status(201).json(mob)
     }
+
+    async readyByName(req: Request, res: Response) {
+        const name = req.params.name
+
+        const mob = await MobService.readByName(name)
+
+        return res.status(200).json(mob)
+    }
 }
 
 export default new MobController()
