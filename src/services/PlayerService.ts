@@ -4,7 +4,7 @@ import { playerRepository } from '../repositories/PlayerRepository'
 class PlayerService {
     async create(username: string, role: string) {
         if (!username || !role)
-            throw createHttpError(400, 'username or role invalid')
+            throw createHttpError(400, 'invalid username or role')
 
         const alreadyPlayer = await playerRepository.find({
             where: { username: username }
