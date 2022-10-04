@@ -21,6 +21,6 @@ export class Mob extends BaseEntity {
     @Column({ type: 'text', nullable: false })
     classification!: string
 
-    @Column({ type: 'int8', default: 0, transformer: new ColumnNumberTransformer() })
+    @Column({ type: 'int8', nullable: false, transformer: new ColumnNumberTransformer() })
     experience!: number
 }

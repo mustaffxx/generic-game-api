@@ -2,9 +2,9 @@ import createHttpError from "http-errors"
 import { mobRepository } from "../repositories/MobRepository"
 
 class MobService {
-    async create(name: string, classification: string) {
-        if (!name || !classification)
-            throw createHttpError(400, 'invalid name or classification')
+    async create(name: string, classification: string, experience: number) {
+        if (!name || !classification || !experience)
+            throw createHttpError(400, 'invalid name, classification or experience')
 
         const alreadyMob = await mobRepository.find({
             where: { name: name }
@@ -13,7 +13,7 @@ class MobService {
         if (alreadyMob.length)
             throw createHttpError(409, 'mob name already exist')
 
-        const mob = mobRepository.create({ name, classification })
+        const mob = mobRepository.create({ name, classification, experience })
 
         await mobRepository.save(mob)
 
