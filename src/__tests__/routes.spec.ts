@@ -37,7 +37,7 @@ describe('playerRoutes', () => {
             expect(response.body).toEqual({
                 username: expect.any(String),
                 role: expect.any(String),
-                experience: expect.any(String)
+                experience: expect.any(Number)
             })
         })
 
@@ -67,7 +67,7 @@ describe('playerRoutes', () => {
             expect(response.body).toEqual({
                 username: expect.any(String),
                 role: expect.any(String),
-                experience: expect.any(String)
+                experience: expect.any(Number)
             })
         })
 
@@ -90,7 +90,7 @@ describe('playerRoutes', () => {
             expect(response.body).toEqual({
                 username: username,
                 role: role,
-                experience: expect.any(String)
+                experience: expect.any(Number)
             })
         })
 
