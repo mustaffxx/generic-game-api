@@ -3,6 +3,7 @@ import app from '../app'
 import { AppDataSource } from '../data-source'
 
 import { playerRepository } from '../repositories/PlayerRepository'
+import { mobRepository } from '../repositories/MobRepository'
 
 beforeAll(async () => {
     await AppDataSource.initialize()
@@ -159,6 +160,29 @@ describe('mobRoutes', () => {
 
         it('should return 404 status code if mob does not exist', async () => {
             const response = await supertest(app).get('/api/game/mob/' + fakeMobs[0].name)
+
+            expect(response.status).toBe(404)
+        })
+    })
+
+    describe('deleteByName', () => {
+        it('should return 200 status code with empty values in properties', async () => {
+            const name = fakeMobs[0].name
+            const classification = fakeMobs[0].classification
+            await mobRepository.create({ name, classification }).save()
+
+            const response = await supertest(app).delete('/api/game/mob/' + name)
+
+            expect(response.status).toBe(200)
+            expect(response.body).toEqual({
+                name: name,
+                classification: classification,
+                experience: expect.any(Number)
+            })
+        })
+
+        it('should return 404 status code if mob does not exist', async () => {
+            const response = await supertest(app).delete('/api/game/mob/' + fakeMobs[0].name)
 
             expect(response.status).toBe(404)
         })

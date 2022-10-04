@@ -18,6 +18,14 @@ class MobController {
 
         return res.status(200).json(mob)
     }
+
+    async deleteByName(req: Request, res: Response) {
+        const name = req.params.name
+
+        const mob = await MobService.deleteByName(name)
+
+        return res.status(200).json(mob)
+    }
 }
 
 export default new MobController()
