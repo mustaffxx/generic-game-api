@@ -11,7 +11,7 @@ class MobService {
         })
 
         if (alreadyMob.length)
-            throw createHttpError(409, 'mob username already exist')
+            throw createHttpError(409, 'mob name already exist')
 
         const mob = mobRepository.create({ name, classification })
 
