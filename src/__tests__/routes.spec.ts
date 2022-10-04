@@ -101,3 +101,30 @@ describe('playerRoutes', () => {
         })
     })
 })
+
+describe('mobRoutes', () => {
+
+    const fakeMobs = [
+        {
+            name: 'test1',
+            classification: 'classification1'
+        }, {
+            name: 'test2',
+            classification: 'classification2'
+        }
+    ]
+
+    describe('create', () => {
+        it('should create mob', async () => {
+            const response = await supertest(app).post('/api/game/mob').send(fakeMobs[0])
+
+            expect(response.status).toBe(201)
+
+            expect(response.body).toEqual({
+                name: expect.any(String),
+                classification: expect.any(String),
+                experience: expect.any(Number)
+            })
+        })
+    })
+})
