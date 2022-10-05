@@ -39,6 +39,35 @@ class MobService {
         }
     }
 
+    async updateByName(name: string, newName: string) {
+        if (!newName)
+            throw createHttpError(400, 'invalid new name')
+
+        const mob = await mobRepository.findOne({
+            where: { name: name }
+        })
+
+        if (!mob)
+            throw createHttpError(404, 'mob does not exist')
+
+        const mobWithNewUsername = await mobRepository.findOne({
+            where: { name: newName }
+        })
+
+        if (mobWithNewUsername)
+            throw createHttpError(409, 'new name already used')
+
+        mob.name = newName
+
+        await mobRepository.save(mob)
+
+        return {
+            name: mob.name,
+            classification: mob.classification,
+            experience: mob.experience
+        }
+    }
+
     async deleteByName(name: string) {
         const mob = await mobRepository.findOne({
             where: { name: name }

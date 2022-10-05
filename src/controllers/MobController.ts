@@ -19,6 +19,16 @@ class MobController {
         return res.status(200).json(mob)
     }
 
+    async updateByName(req: Request, res: Response) {
+        const name = req.params.name
+
+        const { newName } = req.body
+
+        const mob = await MobService.updateByName(name, newName)
+
+        return res.status(200).json(mob)
+    }
+
     async deleteByName(req: Request, res: Response) {
         const name = req.params.name
 

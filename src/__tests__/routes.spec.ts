@@ -104,40 +104,40 @@ describe('playerRoutes', () => {
                 experience: 0
             })
         })
-    })
 
-    it('should return 400 status code if pass incorrect params', async () => {
-        const response = await supertest(app)
-            .patch('/api/game/player/' + fakePlayers[0].username)
-            .send({ newUsername: '' })
+        it('should return 400 status code if pass incorrect params', async () => {
+            const response = await supertest(app)
+                .patch('/api/game/player/' + fakePlayers[0].username)
+                .send({ newUsername: '' })
 
-        expect(response.status).toBe(400)
-    })
+            expect(response.status).toBe(400)
+        })
 
-    it('should return 404 status code if player does not exist', async () => {
-        const response = await supertest(app)
-            .patch('/api/game/player/' + fakePlayers[0].username)
-            .send({ newUsername: 'newUsername' })
+        it('should return 404 status code if player does not exist', async () => {
+            const response = await supertest(app)
+                .patch('/api/game/player/' + fakePlayers[0].username)
+                .send({ newUsername: 'newUsername' })
 
-        expect(response.status).toBe(404)
-    })
+            expect(response.status).toBe(404)
+        })
 
-    it('should return 409 status code if already exist a player with newUsername', async () => {
-        await playerRepository.create({
-            username: fakePlayers[0].username,
-            role: fakePlayers[0].role
-        }).save()
+        it('should return 409 status code if already exist a player with newUsername', async () => {
+            await playerRepository.create({
+                username: fakePlayers[0].username,
+                role: fakePlayers[0].role
+            }).save()
 
-        await playerRepository.create({
-            username: fakePlayers[1].username,
-            role: fakePlayers[1].role
-        }).save()
+            await playerRepository.create({
+                username: fakePlayers[1].username,
+                role: fakePlayers[1].role
+            }).save()
 
-        const response = await supertest(app)
-            .patch('/api/game/player/' + fakePlayers[0].username)
-            .send({ newUsername: fakePlayers[1].username })
+            const response = await supertest(app)
+                .patch('/api/game/player/' + fakePlayers[0].username)
+                .send({ newUsername: fakePlayers[1].username })
 
-        expect(response.status).toBe(409)
+            expect(response.status).toBe(409)
+        })
     })
 
     describe('deleteByUsername', () => {
@@ -324,6 +324,52 @@ describe('mobRoutes', () => {
             const response = await supertest(app).get('/api/game/mob/' + fakeMobs[0].name)
 
             expect(response.status).toBe(404)
+        })
+    })
+
+    describe('updateByName', () => {
+        it('should return 200 status code with mob renamed', async () => {
+            await mobRepository.create(fakeMobs[0]).save()
+
+            const response = await supertest(app)
+                .patch('/api/game/mob/' + fakeMobs[0].name)
+                .send({ newName: 'newName' })
+
+            expect(response.status).toBe(200)
+
+            expect(response.body).toEqual({
+                name: 'newName',
+                classification: fakeMobs[0].classification,
+                experience: fakeMobs[0].experience
+            })
+        })
+
+        it('should return 400 status code if pass incorrect params', async () => {
+            const response = await supertest(app)
+                .patch('/api/game/mob/' + fakeMobs[0].name)
+                .send({ newName: '' })
+
+            expect(response.status).toBe(400)
+        })
+
+        it('should return 404 status code if mob does not exist', async () => {
+            const response = await supertest(app)
+                .patch('/api/game/mob/' + fakeMobs[0].name)
+                .send({ newName: 'newName' })
+
+            expect(response.status).toBe(404)
+        })
+
+        it('should return 409 status code if already exist a mob with newName', async () => {
+            await mobRepository.create(fakeMobs[0]).save()
+
+            await mobRepository.create(fakeMobs[1]).save()
+
+            const response = await supertest(app)
+                .patch('/api/game/mob/' + fakeMobs[0].name)
+                .send({ newName: fakeMobs[1].name })
+
+            expect(response.status).toBe(409)
         })
     })
 
