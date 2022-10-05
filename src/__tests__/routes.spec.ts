@@ -102,6 +102,95 @@ describe('playerRoutes', () => {
             expect(response.status).toBe(404)
         })
     })
+
+    describe('getBattle', () => {
+
+        const fakeMobs = [
+            {
+                name: 'test1',
+                classification: 'classification1',
+                experience: 3
+            }, {
+                name: 'test2',
+                classification: 'classification2',
+                experience: 7
+            },
+            {
+                name: 'test3',
+                classification: 'classification2',
+                experience: 9
+            }
+        ]
+
+        it('should return 200 status code with expected response body', async () => {
+            fakeMobs.forEach(async (fakeMob) => {
+                await mobRepository.create({
+                    name: fakeMob.name,
+                    classification: fakeMob.classification,
+                    experience: fakeMob.experience
+                }).save()
+            })
+
+            await playerRepository.create({
+                username: fakePlayers[0].username,
+                role: fakePlayers[0].role
+            }).save()
+
+            const response = await supertest(app).get('/api/game/player/battle/' + fakePlayers[0].username)
+
+            expect(response.status).toBe(200)
+
+            expect(response.body).toEqual({
+                username: expect.any(String),
+                role: expect.any(String),
+                experience: expect.any(Number),
+                battles: expect.any(Array)
+            })
+        })
+
+        it('should return 200 status code with experience equal to sum of battle experiences', async () => {
+            fakeMobs.forEach(async (fakeMob) => {
+                await mobRepository.create({
+                    name: fakeMob.name,
+                    classification: fakeMob.classification,
+                    experience: fakeMob.experience
+                }).save()
+            })
+
+            await playerRepository.create({
+                username: fakePlayers[0].username,
+                role: fakePlayers[0].role
+            }).save()
+
+            const response = await supertest(app).get('/api/game/player/battle/' + fakePlayers[0].username)
+
+            expect(response.status).toBe(200)
+
+            expect(response.body).toEqual({
+                username: fakePlayers[0].username,
+                role: fakePlayers[0].role,
+                experience: response.body.battles.reduce((prev: number, battle: any) => prev + battle.experience, 0),
+                battles: expect.any(Array)
+            })
+        })
+
+        it('should return 404 status code if player does not exist to battle', async () => {
+            const response = await supertest(app).get('/api/game/player/battle/' + fakePlayers[0].username)
+
+            expect(response.status).toBe(404)
+        })
+
+        it('should return 404 status code if mobs does not exist to battle', async () => {
+            await playerRepository.create({
+                username: fakePlayers[0].username,
+                role: fakePlayers[0].role
+            }).save()
+
+            const response = await supertest(app).get('/api/game/player/battle/' + fakePlayers[0].username)
+
+            expect(response.status).toBe(404)
+        })
+    })
 })
 
 describe('mobRoutes', () => {

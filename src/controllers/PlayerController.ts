@@ -26,6 +26,14 @@ class PlayerController {
 
         return res.status(200).json(player)
     }
+
+    async getBattle(req: Request, res: Response) {
+        const username = req.params.username
+
+        const player = await PlayerService.getBattle(username)
+
+        return res.status(200).json(player)
+    }
 }
 
 export default new PlayerController()

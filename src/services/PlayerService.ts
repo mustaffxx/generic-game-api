@@ -1,5 +1,6 @@
 import createHttpError from 'http-errors'
 import { playerRepository } from '../repositories/PlayerRepository'
+import { mobRepository } from '../repositories/MobRepository'
 
 class PlayerService {
     async create(username: string, role: string) {
@@ -54,6 +55,49 @@ class PlayerService {
             role: player.role,
             experience: player.experience
         }
+    }
+
+    async getBattle(username: string) {
+        const player = await playerRepository.findOne({
+            where: { username: username }
+        })
+
+        if (!player)
+            throw createHttpError(404, 'player does not exist')
+
+        const [allMobs, mobsCount] = await mobRepository.findAndCount()
+
+        if (!mobsCount)
+            throw createHttpError(404, 'mob does not exist')
+
+
+        const battles = []
+
+        const randomNumberOfBattles = Math.floor(Math.random() * 11)
+
+        for (let i = 0; i < randomNumberOfBattles; i++) {
+            const randomMobIndex = Math.floor(Math.random() * mobsCount)
+
+            const mob = allMobs[randomMobIndex]
+
+            player.experience += mob.experience
+
+            battles.push({
+                name: mob.name,
+                classification: mob.classification,
+                experience: mob.experience
+            })
+        }
+
+        await playerRepository.save(player)
+
+        return {
+            username: player.username,
+            role: player.role,
+            experience: player.experience,
+            battles: battles
+        }
+
     }
 }
 
