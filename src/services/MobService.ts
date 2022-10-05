@@ -50,11 +50,11 @@ class MobService {
         if (!mob)
             throw createHttpError(404, 'mob does not exist')
 
-        const mobWithNewUsername = await mobRepository.findOne({
+        const mobWithNewName = await mobRepository.findOne({
             where: { name: newName }
         })
 
-        if (mobWithNewUsername)
+        if (mobWithNewName)
             throw createHttpError(409, 'new name already used')
 
         mob.name = newName
