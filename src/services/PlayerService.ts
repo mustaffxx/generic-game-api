@@ -40,6 +40,35 @@ class PlayerService {
         }
     }
 
+    async updateByUsername(username: string, newUsername: string) {
+        if (!newUsername)
+            throw createHttpError(400, 'invalid new username')
+
+        const player = await playerRepository.findOne({
+            where: { username: username }
+        })
+
+        if (!player)
+            throw createHttpError(404, 'player does not exist')
+
+        const playerWithNewUsername = await playerRepository.findOne({
+            where: { username: newUsername }
+        })
+
+        if (playerWithNewUsername)
+            throw createHttpError(409, 'new username already used')
+
+        player.username = newUsername
+
+        await playerRepository.save(player)
+
+        return {
+            username: player.username,
+            role: player.role,
+            experience: player.experience
+        }
+    }
+
     async deleteByUsername(username: string) {
         const player = await playerRepository.findOne({
             where: { username: username }

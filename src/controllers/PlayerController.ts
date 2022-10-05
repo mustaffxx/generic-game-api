@@ -27,6 +27,16 @@ class PlayerController {
         return res.status(200).json(player)
     }
 
+    async updateByUsername(req: Request, res: Response) {
+        const username = req.params.username
+
+        const { newUsername } = req.body
+
+        const player = await PlayerService.updateByUsername(username, newUsername)
+
+        return res.status(200).json(player)
+    }
+
     async getBattle(req: Request, res: Response) {
         const username = req.params.username
 
