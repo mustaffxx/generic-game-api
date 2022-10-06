@@ -1,0 +1,95 @@
+openapi: 3.0.0
+info:
+  title: Generic-Game-API
+  description: An API used as backend for MUD games
+  version: 0.1.9
+
+server:
+  - url: http://localhost:3030
+
+paths:
+  /api/game/player:
+    post:
+      summary: Create a player.
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  required: true
+                  example: John Doe
+                role:
+                  type: string
+                  required: true
+                  example: Human
+
+      responses:
+        '201':
+          description: An object with user created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Player'
+        '400':
+          description: Invalid username or role
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: Invalid username or role
+        '409':
+          description: Username already exists
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 409
+                  message:
+                    type: string
+                    example: Username already exists
+        '5XX':
+          $ref: '#/components/schemas/InternalServerError'
+
+
+components:
+  schemas:
+    Player:
+      type: object
+      properties:
+        username:
+          type: string
+          example: John Doe
+        role:
+          type: string
+          example: Human
+        experience:
+          type: integer
+          example: 0
+
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: integer
+                example: 500
+              message:
+                type: string
+                example: Internal Server Error
