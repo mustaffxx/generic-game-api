@@ -1,15 +1,32 @@
 version: '3.9'
 services:
-  db:
+  web:
+      build: .
+      container_name: generic_game_api_container
+      command: yarn run dev
+      restart: always
+      volumes:
+        - app_data:/usr/app/
+        - /usr/app/node_modules
+      ports:
+        - "${APP_PORT}:${APP_PORT}"
+      depends_on:
+        - database
+      networks:
+        - appnetwork
+      env_file:
+        - .env
+  
+  database:
     container_name: postgres_container
     image: 'postgres:latest'
     restart: always
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
-      - "5432:5432"
+      - "${DB_PORT}:${DB_PORT}"
     networks:
-      - pgnetwork
+      - appnetwork
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -25,15 +42,16 @@ services:
     ports:
       - "5050:80"
     networks:
-      - pgnetwork
+      - appnetwork
     environment:
       PGADMIN_DEFAULT_EMAIL: "pgadmin@email.com"
       PGADMIN_DEFAULT_PASSWORD: "pgadmin"
 
 volumes:
+  app_data:
   postgres_data:
   pgadmin_data:
 
 networks:
-  pgnetwork:
+  appnetwork:
     driver: bridge
