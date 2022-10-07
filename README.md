@@ -11,11 +11,12 @@ $ cp .env.example .env
 ```
 Build and run the containers:
 ```console
-$ docker-compose up -d
+$ docker compose up -d
 ```
+Server is running on http://localhost:3030
 
 ### Usage
-* Make requests in the endpoits
+* Make requests in the endpoints
 
 ### API Endpoints
 #### Player
@@ -34,3 +35,9 @@ $ docker-compose up -d
 | GET | /api/game/mob/:name | To retrieve details of a single mob |
 | PATCH | /api/game/mob/:name | To edit the details of a single mob |
 | DELETE | /api/game/mob/:name | To delete a single mob |
+
+### test
+To test all endpoints:
+```console
+$ yarn jest
+```
